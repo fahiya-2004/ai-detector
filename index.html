@@ -10,177 +10,102 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            background: #f5f5f5;
+            padding: 40px 20px;
         }
-        
         .container {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
             max-width: 600px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
         h1 {
             text-align: center;
-            color: #2d3748;
             margin-bottom: 30px;
+            color: #333;
         }
-        
-        .file-input-wrapper {
-            position: relative;
+        .upload-box {
+            border: 2px dashed #ccc;
+            padding: 40px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
             margin-bottom: 20px;
         }
-        
-        input[type="file"] {
-            width: 100%;
-            padding: 15px;
-            border: 2px dashed #cbd5e0;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
+        .upload-box:hover {
+            border-color: #666;
         }
-        
-        input[type="file"]:hover {
-            border-color: #667eea;
-            background: #f7fafc;
-        }
-        
         #preview {
             max-width: 100%;
-            max-height: 300px;
-            border-radius: 10px;
+            max-height: 400px;
             margin: 20px 0;
             display: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 8px;
         }
-        
         button {
             width: 100%;
             padding: 15px;
-            background: #48bb78;
+            background: #4CAF50;
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
+            border-radius: 8px;
+            font-size: 16px;
             cursor: pointer;
-            transition: all 0.3s;
         }
-        
-        button:hover:not(:disabled) {
-            background: #38a169;
-            transform: translateY(-2px);
+        button:hover {
+            background: #45a049;
         }
-        
         button:disabled {
-            background: #cbd5e0;
+            background: #ccc;
             cursor: not-allowed;
         }
-        
-        .loading {
-            text-align: center;
-            padding: 20px;
-            display: none;
-        }
-        
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .result {
+        #result {
             margin-top: 30px;
-            padding: 25px;
-            border-radius: 10px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
             display: none;
         }
-        
-        .result.ai {
-            background: #fed7d7;
-            border: 2px solid #fc8181;
-        }
-        
-        .result.real {
-            background: #c6f6d5;
-            border: 2px solid #68d391;
-        }
-        
-        .result-title {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        
-        .result.ai .result-title {
-            color: #c53030;
-        }
-        
-        .result.real .result-title {
-            color: #2f855a;
-        }
-        
-        .percentage {
-            font-size: 48px;
+        .result-text {
+            font-size: 24px;
             font-weight: bold;
             text-align: center;
-            margin: 20px 0;
+            margin-bottom: 15px;
         }
-        
-        .result.ai .percentage {
-            color: #e53e3e;
+        .ai-generated {
+            color: #e74c3c;
         }
-        
-        .result.real .percentage {
-            color: #38a169;
+        .real-image {
+            color: #27ae60;
         }
-        
         .confidence {
             text-align: center;
-            color: #4a5568;
-            margin-bottom: 20px;
+            color: #666;
+            margin-top: 10px;
         }
-        
-        .indicators {
+        .loading {
+            text-align: center;
+            color: #666;
             margin-top: 20px;
-        }
-        
-        .indicator {
-            background: white;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        
-        .error {
-            background: #fed7d7;
-            border: 2px solid #fc8181;
-            color: #c53030;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
             display: none;
+        }
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+        .disclaimer {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -188,185 +113,109 @@
     <div class="container">
         <h1>🤖 AI Image Detector</h1>
         
-        <!-- Simple file input that always works -->
-        <div class="file-input-wrapper">
-            <input type="file" id="fileInput" accept="image/*">
+        <div class="upload-box" id="uploadBox">
+            <p>Click to upload an image</p>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
         </div>
         
         <img id="preview" alt="Preview">
         
-        <button id="analyzeBtn" disabled>🔍 Analyze Image</button>
+        <button id="analyzeBtn" disabled>Analyze Image</button>
         
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Analyzing image...</p>
-        </div>
+        <div class="loading" id="loading">Analyzing...</div>
         
         <div class="error" id="error"></div>
         
-        <div class="result" id="result">
-            <div class="result-title" id="resultTitle"></div>
+        <div id="result">
+            <div class="result-text" id="resultText"></div>
             <div class="confidence" id="confidence"></div>
-            <div class="percentage" id="percentage"></div>
-            <div class="indicators" id="indicators"></div>
+        </div>
+        
+        <div class="disclaimer">
+            Note: This is a simplified heuristic-based detector for educational purposes.
+            Real AI detection requires trained neural networks.
         </div>
     </div>
 
     <script>
+        const uploadBox = document.getElementById('uploadBox');
         const fileInput = document.getElementById('fileInput');
         const preview = document.getElementById('preview');
         const analyzeBtn = document.getElementById('analyzeBtn');
         const loading = document.getElementById('loading');
         const result = document.getElementById('result');
-        const errorDiv = document.getElementById('error');
-        
-        let imageBase64 = null;
-        
-        // File input change event
-        fileInput.addEventListener('change', function(e) {
-            console.log('File input changed');
-            
+        const resultText = document.getElementById('resultText');
+        const confidence = document.getElementById('confidence');
+        const error = document.getElementById('error');
+
+        let currentImageData = null;
+
+        // IMPORTANT: Replace this URL with your actual Render URL
+        const API_URL = 'https://your-app-name.onrender.com/analyze';
+        // For local testing: const API_URL = 'http://localhost:5000/analyze';
+
+        uploadBox.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
-            
-            if (!file) {
-                console.log('No file selected');
-                return;
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    currentImageData = e.target.result;
+                    preview.src = currentImageData;
+                    preview.style.display = 'block';
+                    analyzeBtn.disabled = false;
+                    result.style.display = 'none';
+                    error.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
             }
-            
-            console.log('File:', file.name, file.type, file.size);
-            
-            // Check if it's an image
-            if (!file.type.startsWith('image/')) {
-                showError('Please select an image file!');
-                return;
-            }
-            
-            // Read the file
-            const reader = new FileReader();
-            
-            reader.onload = function(event) {
-                imageBase64 = event.target.result;
-                console.log('Image loaded, base64 length:', imageBase64.length);
-                
-                // Show preview
-                preview.src = imageBase64;
-                preview.style.display = 'block';
-                
-                // Enable analyze button
-                analyzeBtn.disabled = false;
-                
-                // Hide previous results
-                result.style.display = 'none';
-                errorDiv.style.display = 'none';
-            };
-            
-            reader.onerror = function(error) {
-                console.error('FileReader error:', error);
-                showError('Error reading file!');
-            };
-            
-            // Start reading
-            reader.readAsDataURL(file);
         });
-        
-        // Analyze button click
-        analyzeBtn.addEventListener('click', async function() {
-            if (!imageBase64) {
-                showError('Please select an image first!');
-                return;
-            }
-            
-            console.log('Analyzing...');
-            
+
+        analyzeBtn.addEventListener('click', async () => {
             loading.style.display = 'block';
             result.style.display = 'none';
-            errorDiv.style.display = 'none';
+            error.style.display = 'none';
             analyzeBtn.disabled = true;
-            
+
             try {
-                console.log('Sending to backend...');
-                
-                const response = await fetch('http://127.0.0.1:5000/analyze', {
+                const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ image: imageBase64 })
+                    body: JSON.stringify({
+                        image: currentImageData
+                    })
                 });
-                
-                console.log('Response status:', response.status);
-                
+
                 const data = await response.json();
-                console.log('Response data:', data);
-                
-                if (data.success) {
-                    displayResult(data);
-                } else {
-                    showError(data.error || 'Analysis failed');
-                }
-                
-            } catch (error) {
-                console.error('Error:', error);
-                showError('Cannot connect to backend! Make sure app.py is running.');
-            } finally {
+
                 loading.style.display = 'none';
                 analyzeBtn.disabled = false;
-            }
-        });
-        
-        function displayResult(data) {
-            const resultDiv = document.getElementById('result');
-            
-            // Set class
-            resultDiv.className = 'result';
-            resultDiv.classList.add(data.isAI ? 'ai' : 'real');
-            
-            // Set content
-            document.getElementById('resultTitle').textContent = 
-                data.isAI ? '⚠️ AI Generated' : '✓ Real Image';
-            
-            document.getElementById('percentage').textContent = 
-                data.percentage + '%';
-            
-            document.getElementById('confidence').textContent = 
-                'Confidence: ' + data.confidence;
-            
-            // Indicators
-            let html = '';
-            if (data.indicators && data.indicators.length > 0) {
-                html += '<strong>Key Indicators:</strong>';
-                data.indicators.forEach(ind => {
-                    html += '<div class="indicator">' + ind + '</div>';
-                });
-            }
-            
-            if (data.details) {
-                html += '<div class="indicator">📐 ' + data.details.dimensions + 
-                       ' • ' + data.details.megapixels + 'MP</div>';
-            }
-            
-            document.getElementById('indicators').innerHTML = html;
-            
-            // Show result
-            resultDiv.style.display = 'block';
-        }
-        
-        function showError(message) {
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-        }
-        
-        // Test backend on load
-        window.addEventListener('load', async function() {
-            console.log('Testing backend connection...');
-            
-            try {
-                const response = await fetch('http://127.0.0.1:5000/health');
-                const data = await response.json();
-                console.log('✓ Backend connected:', data);
-            } catch (error) {
-                console.error('✗ Backend not connected:', error);
-                showError('⚠️ Backend not connected! Run: python app.py');
+
+                if (data.success) {
+                    result.style.display = 'block';
+
+                    if (data.is_ai_generated) {
+                        resultText.textContent = '🤖 AI Generated';
+                        resultText.className = 'result-text ai-generated';
+                    } else {
+                        resultText.textContent = '✓ Real Image';
+                        resultText.className = 'result-text real-image';
+                    }
+
+                    confidence.textContent = `Confidence: ${data.confidence}%`;
+                } else {
+                    error.textContent = 'Error: ' + data.error;
+                    error.style.display = 'block';
+                }
+            } catch (err) {
+                loading.style.display = 'none';
+                analyzeBtn.disabled = false;
+                error.textContent = 'Error: Could not connect to server. Make sure the backend is running.';
+                error.style.display = 'block';
+                console.error(err);
             }
         });
     </script>
