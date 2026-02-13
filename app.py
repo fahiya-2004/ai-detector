@@ -1,9 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from PIL import Image
 import io
 import base64
 import numpy as np
+
+
 
 app = Flask(__name__)
 CORS(app)
@@ -148,14 +150,7 @@ def health():
 
 @app.route('/')
 def home():
-    return jsonify({
-        'message': 'AI Image Detector API',
-        'status': 'running',
-        'endpoints': {
-            '/health': 'Health check',
-            '/analyze': 'POST - Analyze image'
-        }
-    })
+    return render_template("index.html")
 
 if __name__ == '__main__':
     import os
