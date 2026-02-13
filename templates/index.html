@@ -11,67 +11,83 @@
             box-sizing: border-box;
         }
         body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            padding: 40px 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .container {
             max-width: 600px;
-            margin: 0 auto;
+            width: 100%;
             background: white;
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
         h1 {
             text-align: center;
             margin-bottom: 30px;
             color: #333;
+            font-size: 32px;
         }
         .upload-box {
-            border: 2px dashed #ccc;
-            padding: 40px;
+            border: 3px dashed #ccc;
+            padding: 60px 40px;
             text-align: center;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             margin-bottom: 20px;
+            transition: all 0.3s;
+            background: #fafafa;
         }
         .upload-box:hover {
-            border-color: #666;
+            border-color: #667eea;
+            background: #f0f0ff;
+        }
+        .upload-box p {
+            color: #666;
+            font-size: 18px;
         }
         #preview {
             max-width: 100%;
             max-height: 400px;
             margin: 20px 0;
             display: none;
-            border-radius: 8px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         button {
             width: 100%;
-            padding: 15px;
-            background: #4CAF50;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
             cursor: pointer;
+            transition: transform 0.2s;
         }
         button:hover {
-            background: #45a049;
+            transform: translateY(-2px);
         }
         button:disabled {
             background: #ccc;
             cursor: not-allowed;
+            transform: none;
         }
         #result {
             margin-top: 30px;
-            padding: 20px;
+            padding: 25px;
             background: #f9f9f9;
-            border-radius: 8px;
+            border-radius: 12px;
             display: none;
         }
         .result-text {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
             text-align: center;
             margin-bottom: 15px;
@@ -86,12 +102,23 @@
             text-align: center;
             color: #666;
             margin-top: 10px;
+            font-size: 18px;
         }
         .loading {
             text-align: center;
-            color: #666;
+            color: #667eea;
             margin-top: 20px;
             display: none;
+            font-size: 16px;
+        }
+        .loading:after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
         }
         .error {
             background: #fee;
@@ -104,8 +131,9 @@
         .disclaimer {
             text-align: center;
             color: #999;
-            font-size: 12px;
-            margin-top: 20px;
+            font-size: 13px;
+            margin-top: 25px;
+            line-height: 1.6;
         }
     </style>
 </head>
@@ -114,7 +142,7 @@
         <h1>🤖 AI Image Detector</h1>
         
         <div class="upload-box" id="uploadBox">
-            <p>Click to upload an image</p>
+            <p>📁 Click to upload an image</p>
             <input type="file" id="fileInput" accept="image/*" style="display: none;">
         </div>
         
@@ -122,7 +150,7 @@
         
         <button id="analyzeBtn" disabled>Analyze Image</button>
         
-        <div class="loading" id="loading">Analyzing...</div>
+        <div class="loading" id="loading">Analyzing</div>
         
         <div class="error" id="error"></div>
         
@@ -132,8 +160,8 @@
         </div>
         
         <div class="disclaimer">
-            Note: This is a simplified heuristic-based detector for educational purposes.
-            Real AI detection requires trained neural networks.
+            Note: This is a heuristic-based detector for educational purposes.<br>
+            Real AI detection requires trained neural networks and is never 100% accurate.
         </div>
     </div>
 
@@ -150,15 +178,23 @@
 
         let currentImageData = null;
 
-        // IMPORTANT: Replace this URL with your actual Render URL
-        const API_URL = 'http://127.0.0.1:5000/analyze';
-        // For local testing: const API_URL = 'http://localhost:5000/analyze';
+        // CHANGE THIS to your actual Render backend URL after deployment
+        const API_URL = 'https://YOUR-APP-NAME.onrender.com/api/analyze';
+        
+        // For local testing, use: 'http://localhost:5000/api/analyze'
 
         uploadBox.addEventListener('click', () => fileInput.click());
 
         fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
+                // Check file size (max 10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    error.textContent = 'Error: Image too large. Please use an image under 10MB.';
+                    error.style.display = 'block';
+                    return;
+                }
+                
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     currentImageData = e.target.result;
@@ -189,6 +225,10 @@
                     })
                 });
 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
                 const data = await response.json();
 
                 loading.style.display = 'none';
@@ -201,7 +241,7 @@
                         resultText.textContent = '🤖 AI Generated';
                         resultText.className = 'result-text ai-generated';
                     } else {
-                        resultText.textContent = '✓ Real Image';
+                        resultText.textContent = '✅ Real Image';
                         resultText.className = 'result-text real-image';
                     }
 
@@ -213,9 +253,9 @@
             } catch (err) {
                 loading.style.display = 'none';
                 analyzeBtn.disabled = false;
-                error.textContent = 'Error: Could not connect to server. Make sure the backend is running.';
+                error.textContent = 'Error: Could not connect to server. Please make sure the backend is deployed and running.';
                 error.style.display = 'block';
-                console.error(err);
+                console.error('Fetch error:', err);
             }
         });
     </script>
