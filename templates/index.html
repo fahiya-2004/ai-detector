@@ -10,130 +10,177 @@
             padding: 0;
             box-sizing: border-box;
         }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
+        
         .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
             max-width: 600px;
             width: 100%;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
+        
         h1 {
             text-align: center;
+            color: #2d3748;
             margin-bottom: 30px;
-            color: #333;
-            font-size: 32px;
         }
-        .upload-box {
-            border: 3px dashed #ccc;
-            padding: 60px 40px;
-            text-align: center;
-            border-radius: 12px;
-            cursor: pointer;
+        
+        .file-input-wrapper {
+            position: relative;
             margin-bottom: 20px;
-            transition: all 0.3s;
-            background: #fafafa;
         }
-        .upload-box:hover {
-            border-color: #667eea;
-            background: #f0f0ff;
-        }
-        .upload-box p {
-            color: #666;
-            font-size: 18px;
-        }
-        #preview {
-            max-width: 100%;
-            max-height: 400px;
-            margin: 20px 0;
-            display: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        button {
+        
+        input[type="file"] {
             width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
+            padding: 15px;
+            border: 2px dashed #cbd5e0;
+            border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.2s;
-        }
-        button:hover {
-            transform: translateY(-2px);
-        }
-        button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-        #result {
-            margin-top: 30px;
-            padding: 25px;
-            background: #f9f9f9;
-            border-radius: 12px;
-            display: none;
-        }
-        .result-text {
-            font-size: 28px;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        .ai-generated {
-            color: #e74c3c;
-        }
-        .real-image {
-            color: #27ae60;
-        }
-        .confidence {
-            text-align: center;
-            color: #666;
-            margin-top: 10px;
-            font-size: 18px;
-        }
-        .loading {
-            text-align: center;
-            color: #667eea;
-            margin-top: 20px;
-            display: none;
             font-size: 16px;
         }
-        .loading:after {
-            content: '...';
-            animation: dots 1.5s steps(4, end) infinite;
+        
+        input[type="file"]:hover {
+            border-color: #667eea;
+            background: #f7fafc;
         }
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60%, 100% { content: '...'; }
+        
+        #preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-        .error {
-            background: #fee;
-            color: #c33;
+        
+        button {
+            width: 100%;
             padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover:not(:disabled) {
+            background: #38a169;
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
             display: none;
         }
-        .disclaimer {
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .result.ai {
+            background: #fed7d7;
+            border: 2px solid #fc8181;
+        }
+        
+        .result.real {
+            background: #c6f6d5;
+            border: 2px solid #68d391;
+        }
+        
+        .result-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
             text-align: center;
-            color: #999;
-            font-size: 13px;
-            margin-top: 25px;
-            line-height: 1.6;
+        }
+        
+        .result.ai .result-title {
+            color: #c53030;
+        }
+        
+        .result.real .result-title {
+            color: #2f855a;
+        }
+        
+        .percentage {
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .result.ai .percentage {
+            color: #e53e3e;
+        }
+        
+        .result.real .percentage {
+            color: #38a169;
+        }
+        
+        .confidence {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+        
+        .indicators {
+            margin-top: 20px;
+        }
+        
+        .indicator {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .error {
+            background: #fed7d7;
+            border: 2px solid #fc8181;
+            color: #c53030;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
         }
     </style>
 </head>
@@ -141,121 +188,185 @@
     <div class="container">
         <h1>🤖 AI Image Detector</h1>
         
-        <div class="upload-box" id="uploadBox">
-            <p>📁 Click to upload an image</p>
-            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+        <!-- Simple file input that always works -->
+        <div class="file-input-wrapper">
+            <input type="file" id="fileInput" accept="image/*">
         </div>
         
         <img id="preview" alt="Preview">
         
-        <button id="analyzeBtn" disabled>Analyze Image</button>
+        <button id="analyzeBtn" disabled>🔍 Analyze Image</button>
         
-        <div class="loading" id="loading">Analyzing</div>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Analyzing image...</p>
+        </div>
         
         <div class="error" id="error"></div>
         
-        <div id="result">
-            <div class="result-text" id="resultText"></div>
+        <div class="result" id="result">
+            <div class="result-title" id="resultTitle"></div>
             <div class="confidence" id="confidence"></div>
-        </div>
-        
-        <div class="disclaimer">
-            Note: This is a heuristic-based detector for educational purposes.<br>
-            Real AI detection requires trained neural networks and is never 100% accurate.
+            <div class="percentage" id="percentage"></div>
+            <div class="indicators" id="indicators"></div>
         </div>
     </div>
 
     <script>
-        const uploadBox = document.getElementById('uploadBox');
         const fileInput = document.getElementById('fileInput');
         const preview = document.getElementById('preview');
         const analyzeBtn = document.getElementById('analyzeBtn');
         const loading = document.getElementById('loading');
         const result = document.getElementById('result');
-        const resultText = document.getElementById('resultText');
-        const confidence = document.getElementById('confidence');
-        const error = document.getElementById('error');
-
-        let currentImageData = null;
-
-        // CHANGE THIS to your actual Render backend URL after deployment
-        const API_URL = 'https://YOUR-APP-NAME.onrender.com/api/analyze';
+        const errorDiv = document.getElementById('error');
         
-        // For local testing, use: 'http://localhost:5000/api/analyze'
-
-        uploadBox.addEventListener('click', () => fileInput.click());
-
-        fileInput.addEventListener('change', (e) => {
+        let imageBase64 = null;
+        
+        // File input change event
+        fileInput.addEventListener('change', function(e) {
+            console.log('File input changed');
+            
             const file = e.target.files[0];
-            if (file) {
-                // Check file size (max 10MB)
-                if (file.size > 10 * 1024 * 1024) {
-                    error.textContent = 'Error: Image too large. Please use an image under 10MB.';
-                    error.style.display = 'block';
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    currentImageData = e.target.result;
-                    preview.src = currentImageData;
-                    preview.style.display = 'block';
-                    analyzeBtn.disabled = false;
-                    result.style.display = 'none';
-                    error.style.display = 'none';
-                };
-                reader.readAsDataURL(file);
+            
+            if (!file) {
+                console.log('No file selected');
+                return;
             }
+            
+            console.log('File:', file.name, file.type, file.size);
+            
+            // Check if it's an image
+            if (!file.type.startsWith('image/')) {
+                showError('Please select an image file!');
+                return;
+            }
+            
+            // Read the file
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                imageBase64 = event.target.result;
+                console.log('Image loaded, base64 length:', imageBase64.length);
+                
+                // Show preview
+                preview.src = imageBase64;
+                preview.style.display = 'block';
+                
+                // Enable analyze button
+                analyzeBtn.disabled = false;
+                
+                // Hide previous results
+                result.style.display = 'none';
+                errorDiv.style.display = 'none';
+            };
+            
+            reader.onerror = function(error) {
+                console.error('FileReader error:', error);
+                showError('Error reading file!');
+            };
+            
+            // Start reading
+            reader.readAsDataURL(file);
         });
-
-        analyzeBtn.addEventListener('click', async () => {
+        
+        // Analyze button click
+        analyzeBtn.addEventListener('click', async function() {
+            if (!imageBase64) {
+                showError('Please select an image first!');
+                return;
+            }
+            
+            console.log('Analyzing...');
+            
             loading.style.display = 'block';
             result.style.display = 'none';
-            error.style.display = 'none';
+            errorDiv.style.display = 'none';
             analyzeBtn.disabled = true;
-
+            
             try {
-                const response = await fetch(API_URL, {
+                console.log('Sending to backend...');
+                
+                const response = await fetch('http://127.0.0.1:5000/analyze', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        image: currentImageData
-                    })
+                    body: JSON.stringify({ image: imageBase64 })
                 });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
+                
+                console.log('Response status:', response.status);
+                
                 const data = await response.json();
-
-                loading.style.display = 'none';
-                analyzeBtn.disabled = false;
-
+                console.log('Response data:', data);
+                
                 if (data.success) {
-                    result.style.display = 'block';
-
-                    if (data.is_ai_generated) {
-                        resultText.textContent = '🤖 AI Generated';
-                        resultText.className = 'result-text ai-generated';
-                    } else {
-                        resultText.textContent = '✅ Real Image';
-                        resultText.className = 'result-text real-image';
-                    }
-
-                    confidence.textContent = `Confidence: ${data.confidence}%`;
+                    displayResult(data);
                 } else {
-                    error.textContent = 'Error: ' + data.error;
-                    error.style.display = 'block';
+                    showError(data.error || 'Analysis failed');
                 }
-            } catch (err) {
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Cannot connect to backend! Make sure app.py is running.');
+            } finally {
                 loading.style.display = 'none';
                 analyzeBtn.disabled = false;
-                error.textContent = 'Error: Could not connect to server. Please make sure the backend is deployed and running.';
-                error.style.display = 'block';
-                console.error('Fetch error:', err);
+            }
+        });
+        
+        function displayResult(data) {
+            const resultDiv = document.getElementById('result');
+            
+            // Set class
+            resultDiv.className = 'result';
+            resultDiv.classList.add(data.isAI ? 'ai' : 'real');
+            
+            // Set content
+            document.getElementById('resultTitle').textContent = 
+                data.isAI ? '⚠️ AI Generated' : '✓ Real Image';
+            
+            document.getElementById('percentage').textContent = 
+                data.percentage + '%';
+            
+            document.getElementById('confidence').textContent = 
+                'Confidence: ' + data.confidence;
+            
+            // Indicators
+            let html = '';
+            if (data.indicators && data.indicators.length > 0) {
+                html += '<strong>Key Indicators:</strong>';
+                data.indicators.forEach(ind => {
+                    html += '<div class="indicator">' + ind + '</div>';
+                });
+            }
+            
+            if (data.details) {
+                html += '<div class="indicator">📐 ' + data.details.dimensions + 
+                       ' • ' + data.details.megapixels + 'MP</div>';
+            }
+            
+            document.getElementById('indicators').innerHTML = html;
+            
+            // Show result
+            resultDiv.style.display = 'block';
+        }
+        
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        // Test backend on load
+        window.addEventListener('load', async function() {
+            console.log('Testing backend connection...');
+            
+            try {
+                const response = await fetch('http://127.0.0.1:5000/health');
+                const data = await response.json();
+                console.log('✓ Backend connected:', data);
+            } catch (error) {
+                console.error('✗ Backend not connected:', error);
+                showError('⚠️ Backend not connected! Run: python app.py');
             }
         });
     </script>
